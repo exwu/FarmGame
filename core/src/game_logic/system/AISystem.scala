@@ -26,26 +26,26 @@ object AISystem {
 
   def wander(entity: Entity): Unit = {
     val newX = entity.getInt(C.POS_X).get + (if (Random.nextBoolean()) 1 else -1)
-    val newZ = entity.getInt(C.POS_Z).get + (if (Random.nextBoolean()) 1 else -1)
-    GameMap.move(entity, newX, newZ)
+    val newY = entity.getInt(C.POS_Y).get + (if (Random.nextBoolean()) 1 else -1)
+    GameMap.move(entity, newX, newY)
   }
 
   def follow(entity: Entity): Unit = {
     val target = GameInstance.ids(entity.getInt(C.AI_TARGET).get)
-    val (tx, ty, tz) = GameMap.getPOS(target)
-    val (x, y, z) = GameMap.getPOS(entity)
+    val (tx, ty) = GameMap.getPOS(target)
+    val (x, y) = GameMap.getPOS(entity)
     val dx = if (tx - x > 0) 1 else if (tx == x) 0 else -1
-    val dz = if (tz - z > 0) 1 else if (tz == z) 0 else -1
-    GameMap.move(entity, x + dx, z + dz)
+    val dy = if (ty - y > 0) 1 else if (ty == y) 0 else -1
+    GameMap.move(entity, x + dx, y + dy)
   }
 
   def avoid(entity: Entity): Unit = {
     val target = GameInstance.ids(entity.getInt(C.AI_TARGET).get)
-    val (tx, ty, tz) = GameMap.getPOS(target)
-    val (x, y, z) = GameMap.getPOS(entity)
+    val (tx, ty) = GameMap.getPOS(target)
+    val (x, y) = GameMap.getPOS(entity)
     val dx = if (tx - x > 0) -1 else 1
-    val dz = if (tz - z > 0) -1 else 1
-    GameMap.move(entity, x + dx, z + dz)
+    val dy = if (ty - y > 0) -1 else 1
+    GameMap.move(entity, x + dx, y + dy)
 
   }
 }

@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 /**
   * Created by emily on 4/29/16.
   */
-class FortressGame extends Game {
+class FarmGame extends Game {
 
   var batch: SpriteBatch = null
 

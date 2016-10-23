@@ -9,8 +9,8 @@ import game_logic.system.RenderSystem
   * Created by Emily on 8/27/2016.
   */
 object Terrain {
-  val width = 100
-  val height = 100
+  val width = 20
+  val height = 20
   var terrainMap: Array[Array[TerrainCell]] = Array.ofDim(width, height)
 
   val desertSprite = new Texture(Gdx.files.internal("desert_tile.png"))

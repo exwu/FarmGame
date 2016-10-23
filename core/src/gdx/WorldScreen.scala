@@ -10,7 +10,7 @@ import game_logic.system.RenderSystem
 /**
   * Created by emily on 4/29/16.
   */
-class WorldScreen(game: FortressGame) extends Screen {
+class WorldScreen(game: FarmGame) extends Screen {
   val camera = new OrthographicCamera()
   camera.setToOrtho(false)
 
@@ -37,10 +37,10 @@ class WorldScreen(game: FortressGame) extends Screen {
     }
 
     //Gdx.gl.glClearColor(0.1f, .8f, .3f, 1)
-    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
     camera.update()
-    game.batch.setProjectionMatrix(camera.combined);
+    game.batch.setProjectionMatrix(camera.combined)
     game.batch.begin()
     Terrain.render(game.batch)
     RenderSystem.draw(game.batch, GameInstance.entities())

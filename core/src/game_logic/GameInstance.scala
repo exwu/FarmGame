@@ -11,24 +11,21 @@ import game_logic.entity._
 object GameInstance {
   var ids: Map[Int, Entity] = Map()
 
-  val cow = CowFactory.makeCow()
-  val robot = RobotFactory.makeRobot()
-  robot.add(C.AI_STATE, AISystem.AI_STATE_FOLLOWING)
-  robot.add(C.AI_TARGET, cow.id)
-  cow.add(C.AI_STATE, AISystem.AI_STATE_AVOIDING)
-  cow.add(C.AI_TARGET, robot.id)
 
+  val player = PlayerFactory.makePlayer()
+  val crop = CropFactory.makeCrop()
 
 
 
 
   def entities(): Iterable[Entity] = {
-    return ids.values
+    ids.values
   }
 
   def tick(): Unit = {
     val entities = ids.values
     AISystem.update(entities)
+    TimeSystem.update(entities)
   }
 }
 
