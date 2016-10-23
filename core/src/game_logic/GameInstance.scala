@@ -16,8 +16,6 @@ object GameInstance {
   val crop = CropFactory.makeCrop()
 
 
-
-
   def entities(): Iterable[Entity] = {
     ids.values
   }
