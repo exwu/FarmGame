@@ -17,7 +17,8 @@ object PlayerFactory {
 
 
     ent.add(C.VISIBLE, 1)
-    ent.add(C.SPRITE_FILE, "robot_sprite.png")
+    ent.add(C.SPRITE_FILE, "farmer.png")
+    ent.add(C.SPRITE_ASPECT_RATIO, 1.5f)
     GameMap.addToMap(ent)
     ent
   }

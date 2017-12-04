@@ -14,11 +14,13 @@ object AISystem {
 
   def update(entities: Iterable[Entity]): Unit = {
     for (entity <- entities) {
-      entity.getInt(C.AI_STATE) match {
-        case Some(AI_STATE_WANDERING) => wander(entity)
-        case Some(AI_STATE_FOLLOWING) => follow(entity)
-        case Some(AI_STATE_AVOIDING) => avoid(entity)
-        case None => {}
+      if (Random.nextBoolean()) {
+        entity.getInt(C.AI_STATE) match {
+          case Some(AI_STATE_WANDERING) => wander(entity)
+          case Some(AI_STATE_FOLLOWING) => follow(entity)
+          case Some(AI_STATE_AVOIDING) => avoid(entity)
+          case None => {}
+        }
       }
     }
   }

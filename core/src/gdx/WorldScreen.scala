@@ -1,27 +1,24 @@
 package gdx
 
-import com.badlogic.gdx.input.GestureDetector
-import com.badlogic.gdx.input.GestureDetector.{GestureAdapter, GestureListener}
-import com.badlogic.gdx.math.{Vector3, Rectangle}
-import com.badlogic.gdx.{InputAdapter, InputProcessor, Gdx, Screen}
-import com.badlogic.gdx.graphics.{Texture, GL20, OrthographicCamera}
-import game_logic.{GameMap, C, Terrain, GameInstance}
+import com.badlogic.gdx.{Gdx, Screen}
+import com.badlogic.gdx.graphics.{GL20, OrthographicCamera}
+import com.badlogic.gdx.utils.Scaling
+import com.badlogic.gdx.utils.viewport.{ExtendViewport, FillViewport, ScalingViewport, Viewport}
+import game_logic.{C, GameInstance, GameMap, Terrain}
 import game_logic.system.RenderSystem
 
 /**
   * Created by emily on 4/29/16.
   */
 class WorldScreen(game: FarmGame) extends Screen {
-  val camera = new OrthographicCamera()
-  camera.setToOrtho(false)
+  val camera = new OrthographicCamera(20, 20)
+  camera.position.set(10, 10, 0)
+
+  val viewport = new FillViewport(20, 20, camera)
 
   val controller = new Controller(game.batch)
 
 
-  /*
-  val inputProcessor = new MapGestures
-  Gdx.input.setInputProcessor(new GestureDetector(inputProcessor))
-  */
 
   //val gameInstance = GameInstance
 
@@ -29,10 +26,13 @@ class WorldScreen(game: FarmGame) extends Screen {
 
 
   override def resize(width: Int, height: Int): Unit = {
-    controller.resize(width, height)
+    viewport.update(width, height)
+    controller.viewport.update(width, height, true)
   }
 
-  override def dispose(): Unit = {}
+  override def dispose(): Unit = {
+    controller.dispose()
+  }
 
   override def pause(): Unit = {}
 
@@ -51,20 +51,25 @@ class WorldScreen(game: FarmGame) extends Screen {
   def handleInput(): Unit = {
     val playerX = GameInstance.player.getInt(C.POS_X).get
     val playerY = GameInstance.player.getInt(C.POS_Y).get
+    var dX = 0
+    var dY = 0
     if (controller.down()) {
-      GameMap.move(GameInstance.player, playerX, playerY - 1)
+      dY = -1
     } else if (controller.up()) {
-      GameMap.move(GameInstance.player, playerX, playerY + 1)
+      dY = 1
     } else if (controller.left()) {
-      GameMap.move(GameInstance.player, playerX - 1, playerY)
+      dX = -1
     } else if (controller.right()) {
-      GameMap.move(GameInstance.player, playerX + 1, playerY)
+      dX = 1
     }
+    GameMap.move(GameInstance.player, playerX + dX, playerY + dY)
+    camera.translate(dX, dY)
   }
 
 
 
   override def render(delta: Float): Unit = {
+    viewport.apply()
     update()
 
     //Gdx.gl.glClearColor(0.1f, .8f, .3f, 1)

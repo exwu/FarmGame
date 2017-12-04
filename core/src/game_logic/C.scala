@@ -14,6 +14,7 @@ object C {
 
   val SPRITE_FILE = "sprite_file"
   val VISIBLE = "visible"
+  val SPRITE_ASPECT_RATIO = "sprite_aspect_ratio"
 
   val AI_STATE = "ai_state"
   val AI_TARGET = "ai_target"
@@ -22,6 +23,7 @@ object C {
   val NUM_STAGES = "num_stages"
   val STAGE_LENGTH = "stage_length"
   val STAGE = "curr_stage"
+
 
 }
 

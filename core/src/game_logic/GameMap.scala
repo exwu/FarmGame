@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
   * Created by Emily on 8/25/2016.
   */
 object GameMap {
+  // Represent the map as Map from Position to a list of the entities in that position.
   var map: Map[(Int, Int),List[Entity]] = Map()
 
   def addToMap(entity: Entity): Unit = {

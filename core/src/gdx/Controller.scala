@@ -2,37 +2,43 @@ package gdx
 
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.{Texture, OrthographicCamera}
+import com.badlogic.gdx.graphics.{OrthographicCamera, Texture}
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.ui.{Image, Table}
 import com.badlogic.gdx.scenes.scene2d.{InputEvent, InputListener, Stage}
-import com.badlogic.gdx.utils.viewport.FitViewport
+import com.badlogic.gdx.utils.viewport.{FitViewport, ScreenViewport}
 
 class Controller(batch: SpriteBatch) {
-  val camera = new OrthographicCamera()
-  val viewport = new FitViewport(800, 400, camera)
+  // Draws and handles logic for the on screen controller
+
+  val BUTTON_SIZE = 200
+
+  val viewport = new ScreenViewport()
   val stage = new Stage(viewport, batch)
   Gdx.input.setInputProcessor(stage)
   val table = new Table()
-  table.left().bottom()
+  table.setSize(Gdx.graphics.getWidth, Gdx.graphics.getWidth)
+  table.setPosition(0, 0)
 
+
+  // Draw the controller
   val leftBox = new Image(new Texture("flatDark23.png"))
-  leftBox.setSize(50, 50)
+  leftBox.setSize(BUTTON_SIZE, BUTTON_SIZE)
   val leftController = new ControllerListener
   leftBox.addListener(leftController)
 
   val rightBox = new Image(new Texture("flatDark23.png"))
-  rightBox.setSize(50, 50)
+  rightBox.setSize(BUTTON_SIZE, BUTTON_SIZE)
   val rightController = new ControllerListener
   rightBox.addListener(rightController)
 
   val upBox = new Image(new Texture("flatDark23.png"))
-  upBox.setSize(50, 50)
+  upBox.setSize(BUTTON_SIZE, BUTTON_SIZE)
   val upController = new ControllerListener
   upBox.addListener(upController)
 
   val downBox = new Image(new Texture("flatDark23.png"))
-  downBox.setSize(50, 50)
+  downBox.setSize(BUTTON_SIZE, BUTTON_SIZE)
   val downController = new ControllerListener
   downBox.addListener(downController)
 
@@ -43,32 +49,42 @@ class Controller(batch: SpriteBatch) {
   table.add(leftBox).size(leftBox.getWidth, leftBox.getHeight)
   table.add()
   table.add(rightBox).size(rightBox.getWidth, rightBox.getHeight)
-  table.row().padBottom(5)
+  table.row()
   table.add()
   table.add(downBox).size(downBox.getWidth, downBox.getHeight)
   table.add()
-  stage.addActor(table);
+  stage.addActor(table)
 
+
+  // Translate touch events to controls
 
   def left(): Boolean = {
-    leftController.isPressed
+    check(leftController)
   }
   def right(): Boolean = {
-    rightController.isPressed
+    check(rightController)
   }
   def up(): Boolean = {
-    upController.isPressed
+    check(upController)
   }
   def down(): Boolean = {
-    downController.isPressed
+    check(downController)
   }
 
-  def resize(width: Int, height: Int): Unit = {
-    viewport.update(width, height)
+  def check(controller: ControllerListener): Boolean = {
+    val doSend = controller.pressSent && !controller.pressRead
+    if (doSend) controller.pressRead = true
+    return doSend
   }
 
   def render(): Unit = {
+    viewport.apply()
+    stage.act()
     stage.draw()
+  }
+
+  def dispose(): Unit = {
+    stage.dispose()
   }
 
 }
@@ -76,12 +92,17 @@ class Controller(batch: SpriteBatch) {
 class ControllerListener extends InputListener{
   var isPressed = false
 
+  var pressSent = false
+  var pressRead = false
 
   override def touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean = {
     isPressed = true
+    pressSent = true
     return true
   }
   override def touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Unit = {
     isPressed = false
+    pressRead = false
+    pressSent = false
   }
 }
